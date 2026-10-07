@@ -1,0 +1,836 @@
+
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Trajektori Partikel Anak Krakatau</title>
+
+<style>
+
+/* ==========================================================
+   BODY
+   ========================================================== */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f7f9;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px;
+}
+
+h1 {
+    text-align: center;
+    color: #12344d;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+
+/* ==========================================================
+   PETA
+   ========================================================== */
+
+#map {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 600px;
+
+    background: #dceff7;
+
+    border: 2px solid #12344d;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+
+.grid {
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 100%;
+
+    background-image:
+
+        linear-gradient(
+            rgba(30,80,100,0.18) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(30,80,100,0.18) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        10% 10%,
+        10% 10%;
+
+    z-index: 1;
+}
+
+
+/* ==========================================================
+   SVG TRAJEKTORI
+   ========================================================== */
+
+#trail {
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 100%;
+
+    z-index: 2;
+}
+
+
+/* ==========================================================
+   TITIK AWAL
+   ========================================================== */
+
+#start {
+
+    position: absolute;
+
+    width: 13px;
+
+    height: 13px;
+
+    background: black;
+
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 4;
+}
+
+
+/* ==========================================================
+   PARTIKEL
+   ========================================================== */
+
+#particle {
+
+    position: absolute;
+
+    width: 18px;
+
+    height: 18px;
+
+    background: red;
+
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 5;
+
+    box-shadow:
+        0 0 10px rgba(255,0,0,0.7);
+}
+
+
+/* ==========================================================
+   LABEL KOORDINAT
+   ========================================================== */
+
+.coord {
+
+    position: absolute;
+
+    font-size: 12px;
+
+    color: #234;
+
+    background: rgba(255,255,255,0.75);
+
+    padding: 3px 5px;
+
+    border-radius: 3px;
+
+    z-index: 6;
+}
+
+
+/* ==========================================================
+   KONTROL
+   ========================================================== */
+
+.controls {
+
+    background: white;
+
+    padding: 20px;
+
+    margin-top: 15px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.12);
+}
+
+
+button {
+
+    padding: 10px 20px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #12344d;
+
+    color: white;
+
+    margin-right: 8px;
+}
+
+
+button:hover {
+
+    background: #1d587c;
+}
+
+
+input[type="range"] {
+
+    width: 100%;
+
+    margin-top: 15px;
+}
+
+
+/* ==========================================================
+   INFORMASI
+   ========================================================== */
+
+.info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    margin-top: 12px;
+
+    font-size: 16px;
+}
+
+
+/* ==========================================================
+   LEGEND
+   ========================================================== */
+
+.legend {
+
+    margin-top: 15px;
+
+    background: white;
+
+    padding: 15px;
+
+    border-radius: 8px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+Trajektori Partikel di Sekitar Anak Krakatau
+</h1>
+
+
+<p class="subtitle">
+Simulasi OceanParcels menggunakan Arus Copernicus Marine
+</p>
+
+
+<!-- ========================================================
+     AREA PETA
+     ======================================================== -->
+
+<div id="map">
+
+
+    <!-- GRID -->
+
+    <div class="grid"></div>
+
+
+    <!-- LABEL LONGITUDE -->
+
+    <div
+        class="coord"
+        style="left: 2%; bottom: 2%;"
+    >
+        105.01515502929688
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 27%; bottom: 2%;"
+    >
+        105.12°E
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 52%; bottom: 2%;"
+    >
+        105.23°E
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 77%; bottom: 2%;"
+    >
+        105.34°E
+    </div>
+
+
+    <div
+        class="coord"
+        style="right: 2%; bottom: 2%;"
+    >
+        105.4500015258789
+    </div>
+
+
+    <!-- LABEL LATITUDE -->
+
+    <div
+        class="coord"
+        style="left: 1%; top: 2%;"
+    >
+        -6.0499999046325685
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 1%; top: 27%;"
+    >
+        6.09°S
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 1%; top: 52%;"
+    >
+        6.14°S
+    </div>
+
+
+    <div
+        class="coord"
+        style="left: 1%; top: 77%;"
+    >
+        6.18°S
+    </div>
+
+
+    <!-- TRAJEKTORI -->
+
+    <svg
+        id="trail"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+    >
+    </svg>
+
+
+    <!-- TITIK AWAL -->
+
+    <div id="start"></div>
+
+
+    <!-- PARTIKEL BERGERAK -->
+
+    <div id="particle"></div>
+
+
+</div>
+
+
+<!-- ========================================================
+     KONTROL ANIMASI
+     ======================================================== -->
+
+<div class="controls">
+
+
+    <button id="playButton">
+        ▶ Play
+    </button>
+
+
+    <button id="resetButton">
+        ↺ Reset
+    </button>
+
+
+    <div class="info">
+
+        <span>
+            Waktu:
+            <strong id="timeLabel">0 jam</strong>
+        </span>
+
+
+        <span>
+            Longitude:
+            <strong id="lonLabel">-</strong>
+        </span>
+
+
+        <span>
+            Latitude:
+            <strong id="latLabel">-</strong>
+        </span>
+
+    </div>
+
+
+    <input
+        type="range"
+        id="slider"
+        min="0"
+        max="24"
+        value="0"
+        step="1"
+    >
+
+</div>
+
+
+<!-- ========================================================
+     LEGEND
+     ======================================================== -->
+
+<div class="legend">
+
+<strong>Keterangan:</strong>
+
+<br><br>
+
+⚫ Titik awal partikel
+
+<br>
+
+🔴 Posisi partikel saat ini
+
+<br>
+
+━ Jejak trajektori
+
+<br>
+
+▦ Grid koordinat
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+// ==========================================================
+// DATA
+// ==========================================================
+
+const data = [{"hour": 0, "lon": 105.4000015258789, "lat": -6.099999904632568}, {"hour": 1, "lon": 105.38727569580078, "lat": -6.102383136749268}, {"hour": 2, "lon": 105.37415313720703, "lat": -6.104702472686768}, {"hour": 3, "lon": 105.3604736328125, "lat": -6.106984615325928}, {"hour": 4, "lon": 105.3460464477539, "lat": -6.109260082244873}, {"hour": 5, "lon": 105.3307113647461, "lat": -6.111565113067627}, {"hour": 6, "lon": 105.31511688232422, "lat": -6.113919734954834}, {"hour": 7, "lon": 105.29971313476562, "lat": -6.116342544555664}, {"hour": 8, "lon": 105.28453826904297, "lat": -6.118859767913818}, {"hour": 9, "lon": 105.26966094970703, "lat": -6.121498107910156}, {"hour": 10, "lon": 105.25511932373047, "lat": -6.124284744262695}, {"hour": 11, "lon": 105.24089813232422, "lat": -6.127244472503662}, {"hour": 12, "lon": 105.22688293457031, "lat": -6.130377292633057}, {"hour": 13, "lon": 105.21306610107422, "lat": -6.133675575256348}, {"hour": 14, "lon": 105.19947814941406, "lat": -6.137132167816162}, {"hour": 15, "lon": 105.1861343383789, "lat": -6.140737056732178}, {"hour": 16, "lon": 105.17306518554688, "lat": -6.144482135772705}, {"hour": 17, "lon": 105.16021728515625, "lat": -6.148358345031738}, {"hour": 18, "lon": 105.14728546142578, "lat": -6.152353763580322}, {"hour": 19, "lon": 105.13419342041016, "lat": -6.156442642211914}, {"hour": 20, "lon": 105.12091827392578, "lat": -6.160597324371338}, {"hour": 21, "lon": 105.10745239257812, "lat": -6.1647868156433105}, {"hour": 22, "lon": 105.0937271118164, "lat": -6.168970584869385}, {"hour": 23, "lon": 105.07964324951172, "lat": -6.173077583312988}, {"hour": 24, "lon": 105.06515502929688, "lat": -6.177188396453857}];
+
+
+// ==========================================================
+// BATAS KOORDINAT
+// ==========================================================
+
+const lonMin = 105.01515502929688;
+
+const lonMax = 105.4500015258789;
+
+const latMin = -6.227188396453857;
+
+const latMax = -6.0499999046325685;
+
+
+// ==========================================================
+// ELEMENT
+// ==========================================================
+
+const particle =
+    document.getElementById("particle");
+
+const start =
+    document.getElementById("start");
+
+const slider =
+    document.getElementById("slider");
+
+const playButton =
+    document.getElementById("playButton");
+
+const resetButton =
+    document.getElementById("resetButton");
+
+const timeLabel =
+    document.getElementById("timeLabel");
+
+const lonLabel =
+    document.getElementById("lonLabel");
+
+const latLabel =
+    document.getElementById("latLabel");
+
+const svg =
+    document.getElementById("trail");
+
+
+// ==========================================================
+// STATE
+// ==========================================================
+
+let current = 0;
+
+let playing = false;
+
+let timer = null;
+
+
+// ==========================================================
+// KONVERSI LONGITUDE KE POSISI X
+// ==========================================================
+
+function toX(lon) {
+
+    return (
+        (lon - lonMin)
+        /
+        (lonMax - lonMin)
+    ) * 100;
+
+}
+
+
+// ==========================================================
+// KONVERSI LATITUDE KE POSISI Y
+// ==========================================================
+
+function toY(lat) {
+
+    return 100 -
+        (
+            (lat - latMin)
+            /
+            (latMax - latMin)
+        ) * 100;
+
+}
+
+
+// ==========================================================
+// UPDATE PARTIKEL
+// ==========================================================
+
+function updateParticle(index) {
+
+    const p = data[index];
+
+    const x = toX(p.lon);
+
+    const y = toY(p.lat);
+
+
+    particle.style.left =
+        x + "%";
+
+    particle.style.top =
+        y + "%";
+
+
+    if (index === 0) {
+
+        start.style.left =
+            x + "%";
+
+        start.style.top =
+            y + "%";
+
+    }
+
+
+    timeLabel.textContent =
+        p.hour + " jam";
+
+
+    lonLabel.textContent =
+        p.lon.toFixed(4) + "°E";
+
+
+    latLabel.textContent =
+        Math.abs(p.lat).toFixed(4) + "°S";
+
+
+    slider.value =
+        index;
+
+
+    drawTrail(index);
+
+}
+
+
+// ==========================================================
+// GAMBAR JEJAK
+// ==========================================================
+
+function drawTrail(index) {
+
+    svg.innerHTML = "";
+
+    let points = "";
+
+
+    for (
+        let i = 0;
+        i <= index;
+        i++
+    ) {
+
+        const x =
+            toX(data[i].lon);
+
+        const y =
+            toY(data[i].lat);
+
+
+        points +=
+            x + "," + y + " ";
+
+    }
+
+
+    const polyline =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polyline"
+        );
+
+
+    polyline.setAttribute(
+        "points",
+        points
+    );
+
+
+    polyline.setAttribute(
+        "fill",
+        "none"
+    );
+
+
+    polyline.setAttribute(
+        "stroke",
+        "#12344d"
+    );
+
+
+    polyline.setAttribute(
+        "stroke-width",
+        "0.6"
+    );
+
+
+    svg.appendChild(
+        polyline
+    );
+
+}
+
+
+// ==========================================================
+// PLAY
+// ==========================================================
+
+function play() {
+
+    if (playing) {
+        return;
+    }
+
+
+    playing = true;
+
+    playButton.textContent =
+        "⏸ Pause";
+
+
+    timer = setInterval(
+        function() {
+
+            if (
+                current >=
+                data.length - 1
+            ) {
+
+                pause();
+
+                return;
+            }
+
+
+            current++;
+
+            updateParticle(
+                current
+            );
+
+        },
+        500
+    );
+
+}
+
+
+// ==========================================================
+// PAUSE
+// ==========================================================
+
+function pause() {
+
+    playing = false;
+
+    playButton.textContent =
+        "▶ Play";
+
+
+    clearInterval(timer);
+
+}
+
+
+// ==========================================================
+// PLAY / PAUSE BUTTON
+// ==========================================================
+
+playButton.addEventListener(
+    "click",
+    function() {
+
+        if (playing) {
+
+            pause();
+
+        } else {
+
+            play();
+
+        }
+
+    }
+);
+
+
+// ==========================================================
+// RESET BUTTON
+// ==========================================================
+
+resetButton.addEventListener(
+    "click",
+    function() {
+
+        pause();
+
+        current = 0;
+
+        updateParticle(0);
+
+    }
+);
+
+
+// ==========================================================
+// SLIDER
+// ==========================================================
+
+slider.addEventListener(
+    "input",
+    function() {
+
+        pause();
+
+        current =
+            Number(
+                slider.value
+            );
+
+        updateParticle(
+            current
+        );
+
+    }
+);
+
+
+// ==========================================================
+// POSISI AWAL
+// ==========================================================
+
+updateParticle(0);
+
+
+</script>
+
+
+</body>
+
+</html>
